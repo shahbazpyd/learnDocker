@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12.3' # Use the version you specified in your Dockerfile
+        python-version: '3.9' # Use the version you specified in your Dockerfile
 
     # Step 3: Install dependencies (assuming Flask is in requirements.txt)
     - name: Install dependencies
