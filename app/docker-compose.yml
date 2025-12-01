@@ -1,0 +1,38 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # Service 1: Your Python Web App
+  web:
+    build: . # Tells Compose to look for a Dockerfile in the current directory and build the image
+    container_name: python_web_server_compose
+    ports:
+      - "8000:5000" # Host_Port:Container_Port
+    environment:
+      # Define environment variables your Python app needs to connect to the DB
+      - DATABASE_URL=postgres://user:devops_pass@db:5432/appdb
+    networks:
+      - app-network # Connects to the custom network
+    depends_on:
+      - db # Ensures the database starts before the web app
+
+  # Service 2: PostgreSQL Database
+  db:
+    image: postgres:14-alpine # Uses an existing image from Docker Hub (alpine is a smaller base)
+    container_name: postgres_db_compose
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=devops_pass
+      - POSTGRES_DB=appdb
+    volumes:
+      - db-data:/var/lib/postgresql/data # Mount the named volume for persistence
+    networks:
+      - app-network
+
+# Define the custom network and volume
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:

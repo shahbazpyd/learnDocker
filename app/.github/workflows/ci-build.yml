@@ -1,0 +1,39 @@
+# .github/workflows/ci-build.yml
+name: Python CI Build and Test
+
+# 1. Define the Trigger Event
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+# 2. Define the Jobs
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # The type of runner VM to use
+
+    steps:
+    # Step 1: Check out the code from the repository
+    - uses: actions/checkout@v4
+
+    # Step 2: Set up the correct Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.3' # Use the version you specified in your Dockerfile
+
+    # Step 3: Install dependencies (assuming Flask is in requirements.txt)
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # If you had a requirements.txt, you would use: pip install -r requirements.txt
+        pip install Flask unittest
+
+    # Step 4: Run the unit tests
+    - name: Run Tests
+      run: python test_app.py
+
+    # Optional Step 5: Build the Docker image (prepares for CD)
+    - name: Build Docker Image
+      run: docker build -t my-app-image:$(git rev-parse --short HEAD) .
