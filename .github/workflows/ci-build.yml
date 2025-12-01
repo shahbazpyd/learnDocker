@@ -29,7 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         # If you had a requirements.txt, you would use: pip install -r requirements.txt
         pip install Flask
-      shell: /usr/bin/bash -e {0}
 
     # Step 4: Run the unit tests
     - name: Run Tests
